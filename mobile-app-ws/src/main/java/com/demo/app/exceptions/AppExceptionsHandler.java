@@ -14,34 +14,22 @@ import java.util.Date;
 @ControllerAdvice
 public class AppExceptionsHandler extends ResponseEntityExceptionHandler {
 
-
-
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleAnyException(Exception ex, WebRequest request) {
-
-        String customErrorMessageDescription = ex.getLocalizedMessage();
-        if (customErrorMessageDescription == null)
-            customErrorMessageDescription = ex.toString();
-
-        CustomErrorMessage customErrorMessage = new CustomErrorMessage(new Date(), customErrorMessageDescription);
-
-        return new ResponseEntity<>(customErrorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return createResponseEntity(ex);
     }
+
     @ExceptionHandler(value = {NullPointerException.class})
     public ResponseEntity<Object> handleNullPointerException(NullPointerException ex, WebRequest request) {
-
-        String customErrorMessageDescription = ex.getLocalizedMessage();
-        if (customErrorMessageDescription == null)
-            customErrorMessageDescription = ex.toString();
-
-        CustomErrorMessage customErrorMessage = new CustomErrorMessage(new Date(), customErrorMessageDescription);
-
-        return new ResponseEntity<>(customErrorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return createResponseEntity(ex);
     }
 
     @ExceptionHandler(value = {UserServiceException.class})
     public ResponseEntity<Object> handleUserServiceException(UserServiceException ex, WebRequest request) {
+        return createResponseEntity(ex);
+    }
 
+    private ResponseEntity<Object> createResponseEntity(Exception ex) {
         String customErrorMessageDescription = ex.getLocalizedMessage();
         if (customErrorMessageDescription == null)
             customErrorMessageDescription = ex.toString();
