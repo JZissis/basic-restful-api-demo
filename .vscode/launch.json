@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MobileAppWsApplication",
+            "request": "launch",
+            "mainClass": "com.demo.app.mobileappws.MobileAppWsApplication",
+            "projectName": "mobile-app-ws"
+        },
+        {
+            "type": "java",
             "name": "Spring Boot-MobileAppWsApplication<mobile-app-ws>",
             "request": "launch",
             "cwd": "${workspaceFolder}",
