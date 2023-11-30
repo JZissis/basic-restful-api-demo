@@ -1,9 +1,9 @@
 package com.demo.app.shared;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-@Service
+@Component
 public class Utils {
     public String generateUserId() {
         return UUID.randomUUID().toString();

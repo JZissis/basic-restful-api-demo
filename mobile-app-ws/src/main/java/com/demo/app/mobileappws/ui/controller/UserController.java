@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
+@Validated
 @RequestMapping("/users") // http://localhost:8080/users
 public class UserController {
 
-    Map<String, UserRest> users;
     @Autowired
     UserService userService;
     
@@ -40,8 +40,8 @@ public class UserController {
         }
         */
 
-        if (users.containsKey(userId)) {
-            return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
+        if (userService.getUsers().containsKey(userId)) {
+            return new ResponseEntity<UserRest>(userService.getUserById(userId), HttpStatus.OK);
         } else {
             return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
         }
@@ -52,9 +52,9 @@ public class UserController {
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetails) {
 
         UserRest user = userService.createUser(userDetails);
-        if (users == null)
-            users = new HashMap<>();
-        users.put(user.getUserId(), user);
+        if (userService.getUsers() == null)
+            userService.setUsers(new HashMap<>());
+        userService.getUsers().put(user.getUserId(), user);
         return new ResponseEntity<UserRest>(user, HttpStatus.OK);
     }
 
@@ -63,17 +63,17 @@ public class UserController {
                     MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     public UserRest updateUser(@PathVariable String userId,
             @Valid @RequestBody UpdateUserDetailsRequestModel userDetails) {
-        UserRest storedUserDetails = users.get(userId);
+        UserRest storedUserDetails = userService.getUsers().get(userId);
         storedUserDetails.setFirstName(userDetails.getFirstName());
         storedUserDetails.setLastName(userDetails.getLastName());
 
-        users.put(userId, storedUserDetails);
+        userService.getUsers().put(userId, storedUserDetails);
         return storedUserDetails;
     }
 
     @DeleteMapping(path = "/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
-        users.remove(userId);
+        userService.getUsers().remove(userId);
         return ResponseEntity.noContent().build();
     }
 }

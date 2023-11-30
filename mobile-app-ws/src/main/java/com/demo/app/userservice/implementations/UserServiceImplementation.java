@@ -11,8 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 @Service
 public class UserServiceImplementation implements UserService {
+
     Map<String, UserRest> users;
     Utils utils;
+
     @Autowired
     public UserServiceImplementation(Utils utils){
         this.utils = utils;
@@ -33,5 +35,17 @@ public class UserServiceImplementation implements UserService {
         users.put(userId, user);
 
         return user;
+    }
+
+    public UserRest getUserById(String userId){
+        return users.get(userId);
+    }
+
+    public Map<String, UserRest> getUsers(){
+        return users;
+    }
+
+    public void setUsers(Map<String, UserRest> users){
+        this.users = users;
     }
 }
