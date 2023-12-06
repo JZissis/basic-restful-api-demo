@@ -28,9 +28,9 @@ public class UserController {
             @RequestParam(value = "limit", defaultValue = "50") int limit,
             @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort) {
 
-        ArrayList<ResponseEntity<UserRest>> usersEntities = new ArrayList<>();
-        userService.getUsers().forEach((s, UserRest) -> usersEntities.add(new ResponseEntity<UserRest>(userService.getUserById(s), HttpStatus.OK)));
-        return usersEntities;
+        ArrayList<ResponseEntity<UserRest>> userEntities = new ArrayList<>();
+        userService.getUsers().forEach((s, UserRest) -> userEntities.add(new ResponseEntity<>(userService.getUserById(s), HttpStatus.OK)));
+        return userEntities;
     }
 
     @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
@@ -45,9 +45,9 @@ public class UserController {
         */
 
         if (userService.getUsers().containsKey(userId)) {
-            return new ResponseEntity<UserRest>(userService.getUserById(userId), HttpStatus.OK);
+            return new ResponseEntity<>(userService.getUserById(userId), HttpStatus.OK);
         } else {
-            return new ResponseEntity<UserRest>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
@@ -59,7 +59,7 @@ public class UserController {
         if (userService.getUsers() == null)
             userService.setUsers(new HashMap<>());
         userService.getUsers().put(user.getUserId(), user);
-        return new ResponseEntity<UserRest>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @PutMapping(path = "/{userId}", consumes = { MediaType.APPLICATION_JSON_VALUE,
