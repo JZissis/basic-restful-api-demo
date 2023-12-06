@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @RestController
@@ -23,10 +24,13 @@ public class UserController {
     UserService userService;
     
     @GetMapping
-    public String getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
+    public ArrayList<ResponseEntity<UserRest>> getUsers(@RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "limit", defaultValue = "50") int limit,
             @RequestParam(value = "sort", defaultValue = "desc", required = false) String sort) {
-        return "Get users was called with page = " + page + " and limit = " + limit + " and sort = " + sort;
+
+        ArrayList<ResponseEntity<UserRest>> usersEntities = new ArrayList<>();
+        userService.getUsers().forEach((s, UserRest) -> usersEntities.add(new ResponseEntity<UserRest>(userService.getUserById(s), HttpStatus.OK)));
+        return usersEntities;
     }
 
     @GetMapping(path = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
